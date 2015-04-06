@@ -16,8 +16,6 @@ Cameron Pittman, Udacity Course Developer
 cameron *at* udacity *dot* com
 */
 
-var phaseShiftList = [];
-
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
@@ -400,6 +398,7 @@ var pizzaElementGenerator = function (i) {
     return pizzaContainer;
 };
 
+
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function (size) {
     window.performance.mark("mark_start_resize");   // User Timing API function
@@ -450,13 +449,19 @@ var resizePizzas = function (size) {
         return dx;
     }
 
+
     // Iterates through pizza elements on the page and changes their widths
+
+    /*
+        This has been changed to make the rendering faster
+        I have employed JQuery to adjust the width of 
+        container.
+    */
     function changePizzaSizes(size) {
-        for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-            var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-            var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-            document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-        }
+        var allRandomPizzaContainers = document.querySelectorAll(".randomPizzaContainer");
+        var dx = determineDx(allRandomPizzaContainers[0], size);        
+        var newwidth = (allRandomPizzaContainers[0].offsetWidth + dx) + 'px';
+        $(".randomPizzaContainer").css("width", newwidth);       
     }
 
     changePizzaSizes(size);
@@ -550,7 +555,7 @@ function updatePositions() {
     painted.
 */
 
-function updatePizzaPositions() { 
+function updatePizzaPositions() {
     var pizzaBoxHeight = 256;
     var pizzaBoxWidth = 256;
 
@@ -573,9 +578,11 @@ function updatePizzaPositions() {
     updatePositions();
 }
 
+/* This is for storing the phase shifts externally */
+var phaseShiftList = [];
 
 // runs updatePositions on scroll (updated by Ramesh)
-window.addEventListener('scroll',  updatePizzaPositions);
+window.addEventListener('scroll', updatePizzaPositions);
 
 // runs updatePositions on resize (updated by Ramesh)
 window.addEventListener('resize', updatePizzaPositions);
